@@ -79,3 +79,43 @@ class Tree {
 
 module.exports = { Tree, Node };
 ```
+
+## Tree level width
+
+计算tree结构每一层的宽度，比如下面这样：
+```
+Given the root node of a tree, return
+an array where each element is the width
+of the tree at each level.
+--- Example
+Given:
+    0
+  / |  \
+1   2   3
+|       |
+4       5
+Answer: [1, 3, 2]
+```
+解决方案如下：
+```
+function levelWidth(root) {
+  const arr = [root, 's'];
+  const counters = [0];
+
+  while (arr.length > 1) {
+    const node = arr.shift();
+
+    if (node === 's') {
+      counters.push(0);
+      arr.push('s');
+    } else {
+      arr.push(...node.children);
+      counters[counters.length - 1]++;
+    }
+  }
+
+  return counters;
+}
+```
+其实本质上是利用广度优先的搜索，让计算width明显就是广度优先了，关键是如何区分不同的level。这里是在array加上一个's'标识符，用来分隔不同的level数据。
+这个trick还是很巧妙的。
