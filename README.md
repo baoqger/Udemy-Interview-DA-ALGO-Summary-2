@@ -222,3 +222,103 @@ class Node {
 }
 ```
 毫无疑问依靠递归来说实现的。
+
+## Validate the Binary Search Tree 
+
+```
+function validate(node, min = null, max = null) {
+  if (max !== null && node.data > max) {
+    return false;
+  }
+
+  if (min !== null && node.data < min) {
+    return false;
+  }
+
+  if (node.left && !validate(node.left, min, node.data)) {
+    return false;
+  }
+
+  if (node.right && !validate(node.right, node.data, max)) {
+    return false;
+  }
+
+  return true;
+}
+```
+不能只看每个节点自身的children关系，因为随着tree结构的深入，每个节点能接受的值会逐渐落在一个区间里，这个区间可以用[min, max]来描述，而在递归操作的时候，要把这个条件加上。
+
+## BubbleSort
+经典的Sort的算法：Bubble，Selection和Merge
+```
+function bubbleSort(arr) {
+  // Implement bubblesort
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < (arr.length - i - 1); j++) {
+      if (arr[j] > arr[j+1]) {
+        const lesser = arr[j+1];
+        arr[j+1] = arr[j];
+        arr[j] = lesser;
+      }
+    }
+  }
+
+  // return the sorted array
+  return arr;
+}
+```
+
+## Selection Sort
+其实跟Bubble Sort是一回事儿。
+```
+function selectionSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let indexOfMin = i;
+
+    for (let j = i+1; j <arr.length; j++) {
+      if (arr[j] < arr[indexOfMin]) {
+        indexOfMin = j;
+      }
+    }
+
+    if (indexOfMin !== i) {
+      let lesser = arr[indexOfMin];
+      arr[indexOfMin] = arr[i];
+      arr[i] = lesser;
+    }
+  }
+
+  return arr;
+}
+```
+
+## Merge Sort
+
+```
+function mergeSort(arr) {
+  if (arr.length === 1) {
+    return arr;
+  }
+
+  const center = Math.floor(arr.length / 2);
+  const left = arr.slice(0, center);
+  const right = arr.slice(center);
+  // 神奇的递归
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+// 辅助函数merge，能够把两个已经排序的left和right数组，整合排序为一个array
+function merge(left, right) {
+  const results = [];
+
+  while (left.length && right.length) {
+    if (left[0] < right[0]) {
+      results.push(left.shift());
+    } else {
+      results.push(right.shift());
+    }
+  }
+  // 到这行的时候，left和right，至少有一个是空的了，所以不用纠结left和right的前后位置了。
+  return [...results, ...left, ...right];
+}
+```
