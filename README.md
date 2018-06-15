@@ -119,3 +119,106 @@ function levelWidth(root) {
 ```
 其实本质上是利用广度优先的搜索，让计算width明显就是广度优先了，关键是如何区分不同的level。这里是在array加上一个's'标识符，用来分隔不同的level数据。
 这个trick还是很巧妙的。
+
+## Events
+
+在这个课程项目中，莫名其妙的加入了这个section，讲JS的事件系统，自己构建一个events类来实现类似eventEmitter的效果，代码如下：
+```
+// --- Directions
+// Create an 'eventing' library out of the
+// Events class.  The Events class should
+// have methods 'on', 'trigger', and 'off'.
+
+class Events {
+  constructor() {
+    this.events = {};
+  }
+  
+  // Register an event handler
+  on(eventName, callback) {
+    if (this.events[eventName]) {
+      this.events[eventName].push(callback);
+    } else {
+      this.events[eventName] = [callback];
+    }
+  }
+
+  // Trigger all callbacks associated
+  // with a given eventName
+  trigger(eventName) {
+    if (this.events[eventName]) {
+      for (let cb of this.events[eventName]) {
+        cb();
+      }
+    }
+  }
+
+  // Remove all event handlers associated
+  // with the given eventName
+  off(eventName) {
+    delete this.events[eventName];
+  }
+}
+```
+感觉上跟Observer观察者模式类似，可以想一想他们的区别了，对比出真知。
+
+## Binary Search Tree
+
+二叉树是树的一个类型，二叉搜索树又是二叉树的一个具体特例。Binary Search Tree的定义是：每个节点最多有两个children（所谓二叉树），而且left子节点比本节点小，right子节点比本节点大。因为这种大小关系的特性，在搜索的时候效率会特别高。
+
+```
+// 1) Implement the Node class to create
+// a binary search tree.  The constructor
+// should initialize values 'data', 'left',
+// and 'right'.
+// 2) Implement the 'insert' method for the
+// Node class.  Insert should accept an argument
+// 'data', then create an insert a new node
+// at the appropriate location in the tree.
+// 3) Implement the 'contains' method for the Node
+// class.  Contains should accept a 'data' argument
+// and return the Node in the tree with the same value.
+// If the value isn't in the tree return null.
+
+class Node {
+  constructor(data) {
+    // 每个node三个属性 
+    this.data = data;
+    this.left = null;
+    this.right = null;
+  }
+
+  insert(data) {
+    if (data < this.data && this.left) {
+      //对left子节点的递归insert
+      this.left.insert(data); 
+    } else if (data < this.data) {
+      // 赋值给left子节点
+      this.left = new Node(data);
+    } else if (data > this.data && this.right) {
+      //对right子节点的递归insert
+      this.right.insert(data);
+    } else if (data > this.data) {
+      // 赋值给right子节点
+      this.right = new Node(data);
+    }
+  }
+
+  contains(data) {
+    if (this.data === data) {
+      return this;
+    }
+
+    if (this.data < data && this.right) {
+      // right子节点的contains操作
+      return this.right.contains(data);
+    } else if (this.data > data && this.left) {
+      // left子节点的contains操作
+      return this.left.contains(data);
+    }
+
+    return null;
+  }
+}
+```
+毫无疑问依靠递归来说实现的。
