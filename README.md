@@ -322,3 +322,35 @@ function merge(left, right) {
   return [...results, ...left, ...right];
 }
 ```
+补充一些不错的问题
+## binary Gap
+
+这是在code平台codility是碰到的一个问题，描述如下：
+
+A binary gap within a positive integer N is any maximal sequence of consecutive zeros that is surrounded by ones at both ends in the binary representation of N.
+
+For example, number 9 has binary representation 1001 and contains a binary gap of length 2. The number 529 has binary representation 1000010001 and contains two binary gaps: one of length 4 and one of length 3. The number 20 has binary representation 10100 and contains one binary gap of length 1. The number 15 has binary representation 1111 and has no binary gaps. The number 32 has binary representation 100000 and has no binary gaps.
+
+把一个正整数转化为二进制之后，寻找长度最长的连续0字符串，返回这个长度。
+
+```
+function binaryGap(num) {
+  let str = num.toString(2).split('')
+  console.log(str)
+  let counter = 0;
+  let max = 0;
+  str.forEach((char) =>  {
+    if (char === '0') {
+      counter ++;
+    } else {
+      if (counter > max) {
+        max = counter;
+      }
+      counter = 0;
+    }
+    // console.log(counter)
+  });
+  return max;
+}
+```
+这个类问题都是模拟整个过程的思路，从中发现规律。最开始的想法可能需要借助一些辅助的数据结构，后面彻底理解了逻辑之后，就可以对最初的设计进行优化。
