@@ -354,3 +354,42 @@ function binaryGap(num) {
 }
 ```
 这个类问题都是模拟整个过程的思路，从中发现规律。最开始的想法可能需要借助一些辅助的数据结构，后面彻底理解了逻辑之后，就可以对最初的设计进行优化。
+
+## Bug and Sell Stock
+
+这个是一个有意思的问题, 有人评论说很简单,但是最开始我确把问题想复杂了。问题描述如下：
+
+You will be given a list of stock prices for a given day and your goal is to return the maximum profit that could have been made by buying a stock at the given price and then selling the stock later on. For example if the input is: [45, 24, 35, 31, 40, 38, 11] then your program should return 16 because if you bought the stock at $24 and sold it at $40, a profit of $16 was made and this is the largest profit that could be made. If no profit could have been made, return -1.
+
+这个题目的一个点是：只能是先买后卖，所以相当于是寻找一个列表中差值最大的两个元素，而是大的数要出在后面。解法如下：
+
+```
+function getMaxProfit(arr) {
+	var minIdx = 0;
+    var maxIdx = 1;
+    var currMin = 0;
+    var maxProfit = 0;
+
+    if(arr.length < 2) {
+        throw new Error("Need atleast two time periods to be profitable!");
+    }
+    
+    for(var i = 1; i < arr.length; i++) {
+
+        // new current min.
+        if(arr[i] < arr[currMin]) { 
+        	currMin = i;
+        }
+        
+        // new best profit
+        if(arr[maxIdx] - arr[minIdx] < arr[i] - arr[currMin]) {
+                maxIdx = i;
+            	minIdx = currMin;
+        }
+
+    }
+
+    maxProfit  = arr[maxIdx] - arr[minIdx];
+    return maxProfit;
+}
+```
